@@ -101,8 +101,6 @@ import Nullable from "../types/nullable";
 
 import Timezone from "./timezone.vue";
 
-export const TIMEZONE_COUNT = 19;
-
 const store = useStore();
 
 // Props
@@ -114,6 +112,7 @@ const { day, modifier } = defineProps<{
 
 // Static Data
 
+const TIMEZONE_COUNT = 19;
 const timezones: TimezoneTemplate[] = new Array(TIMEZONE_COUNT)
   .fill(0)
   .map((_, index) => ({
