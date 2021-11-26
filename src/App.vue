@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import "./style.css";
 import Week from "./components/week.vue";
 </script>
 
