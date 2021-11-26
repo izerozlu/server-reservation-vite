@@ -55,11 +55,11 @@ const {
 } = defineProps<{
   timezone: TimezoneTemplate;
   isDaySelected: boolean;
-  blockCount: number;
   isStartingTimezone: boolean;
-  startingBlockColumn: number;
   isEndingTimezone: boolean;
-  endingBlockColumn: number;
+  startingBlockColumn?: number;
+  endingBlockColumn?: number;
+  blockCount?: number;
 }>();
 
 // Static Data

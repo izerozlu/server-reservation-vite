@@ -83,9 +83,7 @@
         blockSelectionStartingBlock?.timezone === timezone
       "
       :is-ending-timezone="
-        isBlockSelectionActive &&
-        hoveredBlock &&
-        hoveredBlock.timezone === timezone
+        isBlockSelectionActive && hoveredBlock?.timezone === timezone
       "
     />
   </div>
@@ -93,9 +91,14 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+
 import DayTemplate from "../interfaces/day-template";
+import TimezoneTemplate from "../interfaces/timezone-template";
+
 import { useStore } from "../store";
 import { ActionTypes } from "../store/actions";
+import Nullable from "../types/nullable";
+
 import Timezone from "./timezone.vue";
 
 export const TIMEZONE_COUNT = 19;
@@ -106,17 +109,19 @@ const store = useStore();
 
 const { day, modifier } = defineProps<{
   day: DayTemplate;
-  modifier: string;
+  modifier: Nullable<string>;
 }>();
 
 // Static Data
 
-const timezones = new Array(TIMEZONE_COUNT).fill(0).map((_, index) => ({
-  zone: `${Math.floor((index + 18) / 2)}${index % 2 === 0 ? ":00" : ":30"}`,
-  row: index,
-  id: index,
-  day,
-}));
+const timezones: TimezoneTemplate[] = new Array(TIMEZONE_COUNT)
+  .fill(0)
+  .map((_, index) => ({
+    zone: `${Math.floor((index + 18) / 2)}${index % 2 === 0 ? ":00" : ":30"}`,
+    row: index,
+    id: index,
+    day,
+  }));
 
 const columns = new Array(5).fill(0).map((_, index) => index + 1);
 
