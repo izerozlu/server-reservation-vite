@@ -31,72 +31,50 @@
   </component>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import { mapState, mapActions } from 'vuex';
+<script setup lang="ts">
+import { computed } from "vue";
 
-import Block from '~/components/block.vue';
+import TimezoneTemplate from "../interfaces/timezone-template";
 
-import TimezoneTemplate from '~/interfaces/timezone-template';
-import BlockTemplate from '~/interfaces/block-template';
+import { useStore } from "../store";
 
-interface ComponentData {
-  blocks: BlockTemplate[];
-}
+import Block from "./block.vue";
 
-export default Vue.extend({
-  components: { Block },
-  props: {
-    timezone: {
-      type: Object as () => TimezoneTemplate,
-      default: null,
-    },
-    isDaySelected: {
-      type: Boolean,
-      default: false,
-    },
-    blockCount: {
-      type: Number,
-      default: 5,
-    },
-    isStartingTimezone: {
-      type: Boolean,
-      default: false,
-    },
-    startingBlockColumn: {
-      type: Number,
-      default: null,
-    },
-    isEndingTimezone: {
-      type: Boolean,
-      default: false,
-    },
-    endingBlockColumn: {
-      type: Number,
-      default: null,
-    },
-  },
-  data(): ComponentData {
-    return {
-      blocks: new Array(this.blockCount).fill(0).map((_, index: number) => {
-        return {
-          id: `${this.timezone.day.id}_${this.timezone.id}_${index + 1}`,
-          day: this.timezone.day,
-          timezone: this.timezone,
-          column: index + 1,
-          isTaken: false,
-        };
-      }),
-    };
-  },
-  computed: {
-    ...mapState('store', ['selectedTimezone', 'takenBlocks']),
-    isSelectedTimezone(): boolean {
-      return this.isDaySelected;
-    },
-  },
-  methods: {
-    ...mapActions('store', ['takeBlock', 'hoverBlock']),
-  },
+const store = useStore();
+
+// Props
+
+const {
+  timezone,
+  isDaySelected,
+  blockCount,
+  isStartingTimezone,
+  startingBlockColumn,
+  endingBlockColumn,
+  isEndingTimezone,
+} = defineProps<{
+  timezone: TimezoneTemplate;
+  isDaySelected: boolean;
+  blockCount: number;
+  isStartingTimezone: boolean;
+  startingBlockColumn: number;
+  isEndingTimezone: boolean;
+  endingBlockColumn: number;
+}>();
+
+// Static Data
+
+const blocks = new Array(blockCount).fill(0).map((_, index: number) => {
+  return {
+    id: `${timezone.day.id}_${timezone.id}_${index + 1}`,
+    day: timezone.day,
+    timezone: timezone,
+    column: index + 1,
+    isTaken: false,
+  };
 });
+
+// Computed
+
+const isSelectedTimezone = computed(() => isDaySelected);
 </script>
