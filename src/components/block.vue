@@ -21,61 +21,70 @@
   />
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import { mapGetters, mapActions, mapState } from 'vuex';
+<script setup lang="ts">
+import { computed } from "vue";
 
-import BlockTemplate from '~/interfaces/block-template';
+import BlockTemplate from "../interfaces/block-template";
 
-export default Vue.extend({
-  props: {
-    block: {
-      type: Object as () => BlockTemplate,
-      default: () => {},
-    },
-  },
-  computed: {
-    ...mapState('store', ['hoveredBlock']),
-    ...mapGetters('store', [
-      'isBlockSelectionActive',
-      'blockSelectionStartingBlock',
-    ]),
-    isStartingBlock() {
-      return (
-        (this.block as BlockTemplate).id ===
-        this.blockSelectionStartingBlock?.id
-      );
-    },
-    isInBetweenBlock() {
-      return (
-        this.blockSelectionStartingBlock?.column ===
-          (this.block as BlockTemplate).column &&
-        this.blockSelectionStartingBlock.timezone.row <
-          (this.block as BlockTemplate).timezone.row &&
-        this.hoveredBlock?.column === (this.block as BlockTemplate).column &&
-        this.hoveredBlock.timezone.row >
-          (this.block as BlockTemplate).timezone.row
-      );
-    },
-  },
-  methods: {
-    ...mapActions('store', [
-      'takeBlock',
-      'hoverBlock',
-      'startBlockSelection',
-      'endBlockSelection',
-      'cancelBlockSelection',
-    ]),
-    finishBlockSelection(block: BlockTemplate) {
-      if (
-        (this.blockSelectionStartingBlock as BlockTemplate).column ===
-        block.column
-      ) {
-        this.endBlockSelection(block);
-      } else {
-        this.cancelBlockSelection();
-      }
-    },
-  },
-});
+import { useStore } from "../store";
+import { ActionTypes } from "../store/actions";
+import { MutationTypes } from "../store/mutations";
+
+const store = useStore();
+
+// Props
+
+const { block } = defineProps<{ block: BlockTemplate }>();
+
+// Computed
+
+const isStartingBlock = computed(
+  () => block.id === blockSelectionStartingBlock.value?.id
+);
+const isInBetweenBlock = computed(
+  () =>
+    blockSelectionStartingBlock.value &&
+    hoveredBlock.value &&
+    blockSelectionStartingBlock.value.column === block.column &&
+    blockSelectionStartingBlock.value.timezone.row < block.timezone.row &&
+    hoveredBlock.value.column === block.column &&
+    hoveredBlock.value.timezone.row > block.timezone.row
+);
+
+// Computed (Store)
+
+const hoveredBlock = computed(() => store.state.hoveredBlock);
+const isBlockSelectionActive = computed(
+  () => store.getters.isBlockSelectionActive
+);
+const blockSelectionStartingBlock = computed(
+  () => store.getters.blockSelectionStartingBlock
+);
+
+// Methods
+
+const finishBlockSelection = (block: BlockTemplate) => {
+  if (blockSelectionStartingBlock.value?.column === block.column) {
+    endBlockSelection(block);
+  } else {
+    cancelBlockSelection();
+  }
+};
+
+// Methods (Store)
+
+const hoverBlock = (block: { block: BlockTemplate; isEnter: boolean }) => {
+  if (isBlockSelectionActive.value) {
+    store.dispatch(ActionTypes.HOVER_BLOCK, block);
+  }
+};
+const startBlockSelection = (block: BlockTemplate) => {
+  store.dispatch(ActionTypes.START_BLOCK_SELECTION, block);
+};
+const endBlockSelection = (block: BlockTemplate) => {
+  store.dispatch(ActionTypes.END_BLOCK_SELECTION, block);
+};
+const cancelBlockSelection = () => {
+  store.dispatch(ActionTypes.CANCEL_BLOCK_SELECTION);
+};
 </script>
