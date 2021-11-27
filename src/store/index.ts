@@ -5,9 +5,12 @@ import {
   Store as VuexStore,
 } from "vuex";
 import actions, { Actions } from "./actions";
+import blockSelection from "./block-selection";
 import getters, { Getters } from "./getters";
 import mutations, { Mutations } from "./mutations";
 import { state, State } from "./state";
+
+// TODO [ozlui] create a namespace for the root store
 
 export type Store = Omit<
   VuexStore<State>,
@@ -31,10 +34,14 @@ export type Store = Omit<
 };
 
 export const store = createStore({
+  strict: true,
   state,
   getters,
   mutations,
   actions,
+  modules: {
+    blockSelection,
+  },
 });
 
 export const useStore = () => {

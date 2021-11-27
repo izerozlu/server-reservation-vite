@@ -28,6 +28,7 @@ import BlockTemplate from "../interfaces/block-template";
 
 import { useStore } from "../store";
 import { ActionTypes } from "../store/actions";
+import { BlockSelection } from "../store/block-selection/namespace";
 
 const store = useStore();
 
@@ -37,41 +38,33 @@ const { block } = defineProps<{ block: BlockTemplate }>();
 
 // Computed
 
-const isStartingBlock = computed(
-  () => block.id === blockSelectionStartingBlock.value?.id
-);
-const isEndingBlock = computed(
-  () => block.id === blockSelectionEndingBlock.value?.id
-);
+const isStartingBlock = computed(() => block.id === startingBlock.value?.id);
+const isEndingBlock = computed(() => block.id === endingBlock.value?.id);
 const isInBetweenBlock = computed(
   () =>
-    blockSelectionStartingBlock.value &&
-    hoveredBlock.value &&
-    blockSelectionStartingBlock.value.day.id === block.day.id &&
-    blockSelectionStartingBlock.value.column === block.column &&
-    blockSelectionStartingBlock.value.timezone.row < block.timezone.row &&
-    hoveredBlock.value.column === block.column &&
-    hoveredBlock.value.timezone.row > block.timezone.row
+    startingBlock.value && // is there a staringBlock
+    hoveredBlock.value && // is there a hoveredBlock
+    startingBlock.value.day.id === block.day.id && // if the startingBlock is on the same day
+    startingBlock.value.column === block.column && // if the startingBlock is on the same column
+    startingBlock.value.timezone.row < block.timezone.row && // if the startingBlock's row is lesser
+    hoveredBlock.value.column === block.column && // if the hoveredBlock is on the same column
+    hoveredBlock.value.timezone.row > block.timezone.row // if the hoveredBlock's row is greater
 );
 
 // Computed (Store)
 
 const hoveredBlock = computed(() => store.state.hoveredBlock);
 const isBlockSelectionActive = computed(
-  () => store.getters.isBlockSelectionActive
+  () => store.state.blockSelection.active 
 );
-const blockSelectionStartingBlock = computed(
-  () => store.getters.blockSelectionStartingBlock
-);
-const blockSelectionEndingBlock = computed(
-  () => store.getters.blockSelectionEndingBlock
-);
+const startingBlock = computed(() => store.state.blockSelection.startingBlock);
+const endingBlock = computed(() => store.state.blockSelection.endingBlock);
 
 // Methods
 
 const finishBlockSelection = (block: BlockTemplate) => {
-  if (blockSelectionStartingBlock.value?.column === block.column) {
-    if (blockSelectionStartingBlock.value.timezone.row > block.timezone.row) {
+  if (startingBlock.value?.column === block.column) {
+    if (startingBlock.value.timezone.row > block.timezone.row) {
       cancelBlockSelection();
       startBlockSelection(block);
     } else {
@@ -90,12 +83,12 @@ const hoverBlock = (block: { block: BlockTemplate; isEnter: boolean }) => {
   }
 };
 const startBlockSelection = (block: BlockTemplate) => {
-  store.dispatch(ActionTypes.START_BLOCK_SELECTION, block);
+  store.dispatch(BlockSelection.ActionTypes.START_BLOCK_SELECTION, block);
 };
 const endBlockSelection = (block: BlockTemplate) => {
-  store.dispatch(ActionTypes.END_BLOCK_SELECTION, block);
+  store.dispatch(BlockSelection.ActionTypes.END_BLOCK_SELECTION, block);
 };
 const cancelBlockSelection = () => {
-  store.dispatch(ActionTypes.CANCEL_BLOCK_SELECTION);
+  store.dispatch(BlockSelection.ActionTypes.CANCEL_BLOCK_SELECTION);
 };
 </script>

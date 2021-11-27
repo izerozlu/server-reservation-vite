@@ -1,24 +1,15 @@
 import BlockTemplate from "../interfaces/block-template";
 import Nullable from "../types/nullable";
+import { BlockSelection } from "./block-selection/namespace";
 
 export type State = {
   selectedDay: Nullable<number>;
   takenBlocks: BlockTemplate[];
   hoveredBlock: Nullable<BlockTemplate>;
-  blockSelection: {
-    active: boolean;
-    startingBlock: Nullable<BlockTemplate>;
-    endingBlock: Nullable<BlockTemplate>;
-  };
 };
 
-export const state = {
+export const state: State = {
   selectedDay: new Date().getDate(),
   takenBlocks: [],
   hoveredBlock: null,
-  blockSelection: {
-    active: false,
-    startingBlock: null,
-    endingBlock: null,
-  },
 };
