@@ -77,7 +77,6 @@
       :key="timezone.id"
       class="day__timezone"
       :timezone="timezone"
-      :is-day-selected="isDaySelected"
       :is-starting-timezone="
         isBlockSelectionActive &&
         blockSelectionStartingBlock?.timezone === timezone

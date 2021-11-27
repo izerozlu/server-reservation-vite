@@ -59,38 +59,4 @@ const getDayModifier = (weekday: number): DayModifier | null => {
       return null;
   }
 };
-
-// export default Vue.extend({
-//   components: { Day },
-//   data(): ComponentData {
-//     return {
-//       days: [
-//         { name: "Monday", weekday: 1, id: "1" },
-//         { name: "Tuesday", weekday: 2, id: "2" },
-//         { name: "Wednesday", weekday: 3, id: "3" },
-//         { name: "Thursday", weekday: 4, id: "4" },
-//         { name: "Friday", weekday: 5, id: "5" },
-//       ],
-//     };
-//   },
-//   computed: {
-//     ...mapState("store", ["selectedDay"]),
-//   },
-//   methods: {
-//     ...mapActions("store", ["cancelBlockSelection"]),
-//     getDayModifier: (weekday: number): DayModifier | null => {
-//       const today = new Date().getDay();
-//       switch (weekday) {
-//         case today - 1:
-//           return "yesterday";
-//         case today:
-//           return "today";
-//         case today + 1:
-//           return "tomorrow";
-//         default:
-//           return null;
-//       }
-//     },
-//   },
-// });
 </script>

@@ -10,7 +10,7 @@
     }"
     type="button"
   >
-    <template v-if="!isSelectedTimezone">{{ timezone.zone }}</template>
+    <template v-if="!isDaySelected">{{ timezone.zone }}</template>
     <template v-else>
       <span class="timezone__time w-8">{{ timezone.zone }}</span>
       <div class="timezone__blocks blocks flex items-center w-full h-full px-2">
@@ -32,10 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-
+import { computed } from "@vue/reactivity";
 import TimezoneTemplate from "../interfaces/timezone-template";
-
 import { useStore } from "../store";
 
 import Block from "./block.vue";
@@ -46,21 +44,24 @@ const store = useStore();
 
 const {
   timezone,
-  isDaySelected,
   blockCount,
   isStartingTimezone,
   startingBlockColumn,
   endingBlockColumn,
   isEndingTimezone,
-} = defineProps<{
-  timezone: TimezoneTemplate;
-  isDaySelected: boolean;
-  isStartingTimezone: boolean;
-  isEndingTimezone: boolean;
-  startingBlockColumn?: number;
-  endingBlockColumn?: number;
-  blockCount?: number;
-}>();
+} = withDefaults(
+  defineProps<{
+    timezone: TimezoneTemplate;
+    isStartingTimezone: boolean;
+    isEndingTimezone: boolean;
+    startingBlockColumn?: number;
+    endingBlockColumn?: number;
+    blockCount?: number;
+  }>(),
+  {
+    blockCount: 5,
+  }
+);
 
 // Static Data
 
@@ -74,7 +75,9 @@ const blocks = new Array(blockCount).fill(0).map((_, index: number) => {
   };
 });
 
-// Computed
+// Computed (Store)
 
-const isSelectedTimezone = computed(() => isDaySelected);
+const isDaySelected = computed(
+  () => store.state.selectedDay === timezone.day.weekday
+);
 </script>
