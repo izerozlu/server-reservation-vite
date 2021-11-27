@@ -14,7 +14,7 @@
       () =>
         isBlockSelectionActive
           ? finishBlockSelection(block)
-          : startBlockSelection(block)
+          : blockSelectionStore.startBlockSelection(block)
     "
     @mouseenter="() => hoverBlock({ block, isEnter: true })"
     @mouseleave="() => hoverBlock({ block, isEnter: false })"
@@ -28,8 +28,10 @@ import BlockTemplate from "../interfaces/block-template";
 
 import { useStore } from "../store";
 import { ActionTypes } from "../store/actions";
+import { useBlockSelectionStore } from "../store/block-selection";
 
 const store = useStore();
+const blockSelectionStore = useBlockSelectionStore();
 
 // Props
 
@@ -57,14 +59,12 @@ const isInBetweenBlock = computed(
 // Computed (Store)
 
 const hoveredBlock = computed(() => store.state.hoveredBlock);
-const isBlockSelectionActive = computed(
-  () => store.getters.isBlockSelectionActive
-);
+const isBlockSelectionActive = computed(() => blockSelectionStore.active);
 const blockSelectionStartingBlock = computed(
-  () => store.getters.blockSelectionStartingBlock
+  () => blockSelectionStore.startingBlock
 );
 const blockSelectionEndingBlock = computed(
-  () => store.getters.blockSelectionEndingBlock
+  () => blockSelectionStore.endingBlock
 );
 
 // Methods
@@ -72,13 +72,13 @@ const blockSelectionEndingBlock = computed(
 const finishBlockSelection = (block: BlockTemplate) => {
   if (blockSelectionStartingBlock.value?.column === block.column) {
     if (blockSelectionStartingBlock.value.timezone.row > block.timezone.row) {
-      cancelBlockSelection();
-      startBlockSelection(block);
+      blockSelectionStore.cancelBlockSelection();
+      blockSelectionStore.startBlockSelection(block);
     } else {
-      endBlockSelection(block);
+      blockSelectionStore.endBlockSelection(block);
     }
   } else {
-    cancelBlockSelection();
+    blockSelectionStore.cancelBlockSelection();
   }
 };
 
