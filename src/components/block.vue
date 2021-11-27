@@ -47,6 +47,7 @@ const isInBetweenBlock = computed(
   () =>
     blockSelectionStartingBlock.value &&
     hoveredBlock.value &&
+    blockSelectionStartingBlock.value.day.id === block.day.id &&
     blockSelectionStartingBlock.value.column === block.column &&
     blockSelectionStartingBlock.value.timezone.row < block.timezone.row &&
     hoveredBlock.value.column === block.column &&
