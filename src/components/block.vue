@@ -5,7 +5,7 @@
     :class="{
       'bg-red-400': block.isTaken,
       'hover:bg-gray-200': !block.isTaken,
-      'bg-yellow-400': isStartingBlock,
+      'bg-yellow-400': isStartingBlock || isEndingBlock,
       'bg-yellow-200': isInBetweenBlock,
     }"
     type="button"
@@ -28,7 +28,6 @@ import BlockTemplate from "../interfaces/block-template";
 
 import { useStore } from "../store";
 import { ActionTypes } from "../store/actions";
-import { MutationTypes } from "../store/mutations";
 
 const store = useStore();
 
@@ -40,6 +39,9 @@ const { block } = defineProps<{ block: BlockTemplate }>();
 
 const isStartingBlock = computed(
   () => block.id === blockSelectionStartingBlock.value?.id
+);
+const isEndingBlock = computed(
+  () => block.id === blockSelectionEndingBlock.value?.id
 );
 const isInBetweenBlock = computed(
   () =>
@@ -60,12 +62,20 @@ const isBlockSelectionActive = computed(
 const blockSelectionStartingBlock = computed(
   () => store.getters.blockSelectionStartingBlock
 );
+const blockSelectionEndingBlock = computed(
+  () => store.getters.blockSelectionEndingBlock
+);
 
 // Methods
 
 const finishBlockSelection = (block: BlockTemplate) => {
   if (blockSelectionStartingBlock.value?.column === block.column) {
-    endBlockSelection(block);
+    if (blockSelectionStartingBlock.value.timezone.row > block.timezone.row) {
+      cancelBlockSelection();
+      startBlockSelection(block);
+    } else {
+      endBlockSelection(block);
+    }
   } else {
     cancelBlockSelection();
   }

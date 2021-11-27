@@ -47,6 +47,7 @@ const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.START_BLOCK_SELECTION]: ({ commit }, block: BlockTemplate) => {
     commit(MutationTypes.START_BLOCK_SELECTION);
     commit(MutationTypes.SET_STARTING_BLOCK, block);
+    commit(MutationTypes.SET_ENDING_BLOCK, null);
   },
   [ActionTypes.END_BLOCK_SELECTION]: ({ commit }, block: BlockTemplate) => {
     commit(MutationTypes.END_BLOCK_SELECTION);
