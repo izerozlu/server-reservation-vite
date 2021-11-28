@@ -2,7 +2,7 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 import BlockTemplate from "../../interfaces/block-template";
 import Nullable from "../../types/nullable";
 
-export const useBlockSelectionStore = defineStore("block-selection", {
+const useBlockSelectionStore = defineStore("block-selection", {
   state: () => ({
     active: false,
     startingBlock: null as Nullable<BlockTemplate>,
@@ -25,3 +25,5 @@ export const useBlockSelectionStore = defineStore("block-selection", {
     },
   },
 });
+
+export default useBlockSelectionStore;

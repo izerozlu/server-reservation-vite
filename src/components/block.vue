@@ -4,20 +4,22 @@
     class="block h-full rounded flex-1"
     :class="{
       'bg-red-400': block.isTaken,
-      'hover:bg-gray-200': !block.isTaken,
       'bg-yellow-400': isStartingBlock || isEndingBlock,
       'bg-yellow-200': isInBetweenBlock,
+      'hover:bg-gray-200':
+        !(isStartingBlock || isEndingBlock) &&
+        !isInBetweenBlock &&
+        !block.isTaken,
     }"
     type="button"
     :disabled="block.isTaken"
     @click="
       () =>
-        isBlockSelectionActive
+        blockSelectionStore.active
           ? finishBlockSelection(block)
           : blockSelectionStore.startBlockSelection(block)
     "
-    @mouseenter="() => hoverBlock({ block, isEnter: true })"
-    @mouseleave="() => hoverBlock({ block, isEnter: false })"
+    @mouseenter="() => userActionsStore.hoverBlock({ block })"
   />
 </template>
 
@@ -26,12 +28,11 @@ import { computed } from "vue";
 
 import BlockTemplate from "../interfaces/block-template";
 
-import { useStore } from "../store";
-import { ActionTypes } from "../store/actions";
-import { useBlockSelectionStore } from "../store/block-selection";
+import useBlockSelectionStore from "../store/block-selection";
+import useUserActionsStore from "../store/user-actions";
 
-const store = useStore();
 const blockSelectionStore = useBlockSelectionStore();
+const userActionsStore = useUserActionsStore();
 
 // Props
 
@@ -40,62 +41,55 @@ const { block } = defineProps<{ block: BlockTemplate }>();
 // Computed
 
 const isStartingBlock = computed(
-  () => block.id === blockSelectionStartingBlock.value?.id
+  () => block.id === blockSelectionStore.startingBlock?.id
 );
 const isEndingBlock = computed(
-  () => block.id === blockSelectionEndingBlock.value?.id
+  () => block.id === blockSelectionStore.endingBlock?.id
 );
-const isInBetweenBlock = computed(
-  () =>
-    blockSelectionStartingBlock.value &&
-    hoveredBlock.value &&
-    blockSelectionStartingBlock.value.day.id === block.day.id &&
-    blockSelectionStartingBlock.value.column === block.column &&
-    blockSelectionStartingBlock.value.timezone.row < block.timezone.row &&
-    hoveredBlock.value.column === block.column &&
-    hoveredBlock.value.timezone.row > block.timezone.row
-);
+const isInBetweenBlock = computed(() => {
+  const {
+    startingBlock,
+    endingBlock,
+    active: isBlockSelectionActive,
+  } = blockSelectionStore;
+  const { hoveredBlock } = userActionsStore;
 
-// Computed (Store)
-
-const hoveredBlock = computed(() => store.state.hoveredBlock);
-const isBlockSelectionActive = computed(() => blockSelectionStore.active);
-const blockSelectionStartingBlock = computed(
-  () => blockSelectionStore.startingBlock
-);
-const blockSelectionEndingBlock = computed(
-  () => blockSelectionStore.endingBlock
-);
+  return isBlockSelectionActive
+    ? startingBlock &&
+        hoveredBlock &&
+        startingBlock.day.id === block.day.id &&
+        startingBlock.column === block.column &&
+        startingBlock.timezone.row < block.timezone.row &&
+        hoveredBlock.column === block.column &&
+        hoveredBlock.timezone.row > block.timezone.row
+    : startingBlock &&
+        endingBlock &&
+        startingBlock.day.id === block.day.id &&
+        startingBlock.column === block.column &&
+        startingBlock.timezone.row < block.timezone.row &&
+        endingBlock.column === block.column &&
+        endingBlock.timezone.row > block.timezone.row;
+});
 
 // Methods
 
 const finishBlockSelection = (block: BlockTemplate) => {
-  if (blockSelectionStartingBlock.value?.column === block.column) {
-    if (blockSelectionStartingBlock.value.timezone.row > block.timezone.row) {
+  const { startingBlock } = blockSelectionStore;
+
+  if (startingBlock?.column === block.column) {
+    // Same column with startingBlock
+    if (startingBlock.timezone.row > block.timezone.row) {
+      // startingBlock is above selected block
       blockSelectionStore.cancelBlockSelection();
       blockSelectionStore.startBlockSelection(block);
     } else {
+      // startingBlock is below selected block
       blockSelectionStore.endBlockSelection(block);
     }
   } else {
+    // Different column than startingBlock
     blockSelectionStore.cancelBlockSelection();
+    blockSelectionStore.startBlockSelection(block);
   }
-};
-
-// Methods (Store)
-
-const hoverBlock = (block: { block: BlockTemplate; isEnter: boolean }) => {
-  if (isBlockSelectionActive.value) {
-    store.dispatch(ActionTypes.HOVER_BLOCK, block);
-  }
-};
-const startBlockSelection = (block: BlockTemplate) => {
-  store.dispatch(ActionTypes.START_BLOCK_SELECTION, block);
-};
-const endBlockSelection = (block: BlockTemplate) => {
-  store.dispatch(ActionTypes.END_BLOCK_SELECTION, block);
-};
-const cancelBlockSelection = () => {
-  store.dispatch(ActionTypes.CANCEL_BLOCK_SELECTION);
 };
 </script>
