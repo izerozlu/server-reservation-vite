@@ -19,12 +19,6 @@
           :key="block.id"
           :block="block"
           class="timezone__block"
-          :class="{
-            'timezone__block--starting':
-              isStartingTimezone && startingBlockColumn === block.column,
-            'timezone__block--ending':
-              isStartingTimezone && endingBlockColumn === block.column,
-          }"
         />
       </div>
     </template>
@@ -33,29 +27,22 @@
 
 <script setup lang="ts">
 import { computed } from "@vue/reactivity";
+
 import TimezoneTemplate from "../interfaces/timezone-template";
-import { useStore } from "../store";
+import useBlockSelectionStore from "../store/block-selection";
+
+import useUserActionsStore from "../store/user-actions";
 
 import Block from "./block.vue";
 
-const store = useStore();
+const blockSelectionStore = useBlockSelectionStore();
+const userActionsStore = useUserActionsStore();
 
 // Props
 
-const {
-  timezone,
-  blockCount,
-  isStartingTimezone,
-  startingBlockColumn,
-  endingBlockColumn,
-  isEndingTimezone,
-} = withDefaults(
+const { timezone, blockCount } = withDefaults(
   defineProps<{
     timezone: TimezoneTemplate;
-    isStartingTimezone: boolean;
-    isEndingTimezone: boolean;
-    startingBlockColumn?: number;
-    endingBlockColumn?: number;
     blockCount?: number;
   }>(),
   {
@@ -75,9 +62,24 @@ const blocks = new Array(blockCount).fill(0).map((_, index: number) => {
   };
 });
 
+// Computed
+
+const isStartingTimezone = computed(
+  () => blockSelectionStore.startingBlock?.timezone === timezone
+);
+const isEndingTimezone = computed(
+  () => blockSelectionStore.endingBlock?.timezone === timezone
+);
+const startingBlockColumn = computed(
+  () => blockSelectionStore.startingBlock?.column
+);
+const endingBlockColumn = computed(
+  () => blockSelectionStore.endingBlock?.column
+);
+
 // Computed (Store)
 
 const isDaySelected = computed(
-  () => store.state.selectedDay === timezone.day.weekday
+  () => userActionsStore.selectedDay === timezone.day.weekday
 );
 </script>

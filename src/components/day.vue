@@ -17,7 +17,7 @@
         'cursor-pointer': !isDaySelected,
       },
     ]"
-    @click="setSelectedDay(day.weekday)"
+    @click="userActionsStore.setSelectedDay(day.weekday)"
   >
     <div class="day__header flex justify-between">
       <h2 class="day__title capitalize text-2xl">{{ day.name }}</h2>
@@ -63,9 +63,10 @@
             text-center
           "
           :class="{
-            'column--hovered': hoveredColumn === column,
-            'bg-gray-200': hoveredColumn === column,
-            'column--active-selection': activeSelectionColumn === column,
+            'column--hovered': userActionsStore.hoveredBlock?.column === column,
+            'bg-gray-200': userActionsStore.hoveredBlock?.column === column,
+            'column--active-selection':
+              blockSelectionStore.startingBlock?.column === column,
           }"
         >
           {{ column }}
@@ -78,11 +79,12 @@
       class="day__timezone"
       :timezone="timezone"
       :is-starting-timezone="
-        isBlockSelectionActive &&
-        blockSelectionStartingBlock?.timezone === timezone
+        blockSelectionStore.active &&
+        blockSelectionStore.startingBlock?.timezone === timezone
       "
       :is-ending-timezone="
-        isBlockSelectionActive && hoveredBlock?.timezone === timezone
+        blockSelectionStore.active &&
+        blockSelectionStore.endingBlock?.timezone === timezone
       "
     />
   </div>
@@ -94,13 +96,15 @@ import { computed } from "vue";
 import DayTemplate from "../interfaces/day-template";
 import TimezoneTemplate from "../interfaces/timezone-template";
 
-import { useStore } from "../store";
-import { ActionTypes } from "../store/actions";
+import useBlockSelectionStore from "../store/block-selection";
+import useUserActionsStore from "../store/user-actions";
+
 import Nullable from "../types/nullable";
 
 import Timezone from "./timezone.vue";
 
-const store = useStore();
+const blockSelectionStore = useBlockSelectionStore();
+const userActionsStore = useUserActionsStore();
 
 // Props
 
@@ -126,28 +130,10 @@ const columns = new Array(5).fill(0).map((_, index) => index + 1);
 // Computed
 
 const isDaySelected = computed(() =>
-  !selectedDay ? modifier === "today" : selectedDay.value === day.weekday
+  !userActionsStore.selectedDay
+    ? modifier === "today"
+    : userActionsStore.selectedDay === day.weekday
 );
-const hoveredColumn = computed(() => hoveredBlock.value?.column);
-const activeSelectionColumn = computed(
-  () => blockSelectionStartingBlock.value?.column
-);
-
-// Computed (Store)
-
-const selectedDay = computed(() => store.state.selectedDay);
-const hoveredBlock = computed(() => store.state.hoveredBlock);
-const isBlockSelectionActive = computed(
-  () => store.getters.isBlockSelectionActive
-);
-const blockSelectionStartingBlock = computed(
-  () => store.getters.blockSelectionStartingBlock
-);
-
-// Methods (Store)
-
-const setSelectedDay = (weekday: number) =>
-  store.dispatch(ActionTypes.SET_SELECTED_DAY, weekday);
 </script>
 
 <style lang="scss" scoped>
