@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import DayType from "../types/day-type";
+import DayType from "~/types/day-type";
 </script>
 
 <script setup lang="ts">

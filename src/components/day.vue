@@ -94,13 +94,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import DayType from "../types/day-type";
+import DayType from "~/types/day-type";
 
-import useBlockSelectionStore from "../store/block-selection";
-import useUserActionsStore from "../store/user-actions";
+import useBlockSelectionStore from "~/store/block-selection";
+import useUserActionsStore from "~/store/user-actions";
 
-import Nullable from "../types/utility/nullable";
-import TimezoneType from "../types/timezone-type";
+import Nullable from "~/types/utility/nullable";
+import TimezoneType from "~/types/timezone-type";
 
 import Timezone from "./timezone.vue";
 

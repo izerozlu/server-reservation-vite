@@ -26,10 +26,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import BlockType from "../types/block-type";
+import BlockType from "~/types/block-type";
 
-import useBlockSelectionStore from "../store/block-selection";
-import useUserActionsStore from "../store/user-actions";
+import useBlockSelectionStore from "~/store/block-selection";
+import useUserActionsStore from "~/store/user-actions";
 
 const blockSelectionStore = useBlockSelectionStore();
 const userActionsStore = useUserActionsStore();

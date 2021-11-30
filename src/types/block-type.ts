@@ -1,5 +1,5 @@
-import TimezoneType from "./timezone-type";
-import DayType from "./day-type";
+import TimezoneType from "~/types/timezone-type";
+import DayType from "~/types/day-type";
 
 export type BlockType = {
   id: string;

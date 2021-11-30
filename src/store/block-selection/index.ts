@@ -1,6 +1,6 @@
-import { acceptHMRUpdate, defineStore } from "pinia";
-import BlockType from "../../types/block-type";
-import Nullable from "../../types/utility/nullable";
+import { defineStore } from "pinia";
+import BlockType from "~/types/block-type";
+import Nullable from "~/types/utility/nullable";
 
 const useBlockSelectionStore = defineStore("block-selection", {
   state: () => ({

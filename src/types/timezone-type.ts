@@ -1,4 +1,4 @@
-import DayType from "./day-type";
+import DayType from "~/types/day-type";
 
 type TimezoneType = {
   day: DayType;
