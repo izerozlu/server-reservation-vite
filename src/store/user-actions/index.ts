@@ -4,7 +4,7 @@ import Nullable from "../../types/nullable";
 
 const useUserActionsStore = defineStore("user-actions", {
   state: () => ({
-    selectedDay: new Date().getDate() as Nullable<number>,
+    selectedDay: new Date().getDay() as Nullable<number>,
     takenBlocks: [] as BlockTemplate[],
     hoveredBlock: null as Nullable<BlockTemplate>,
   }),

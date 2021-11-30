@@ -1,5 +1,5 @@
 <template>
-  <div class="week h-full grid grid-flow-col grid-cols-5 gap-x-3 px-2 py-4">
+  <div class="week h-full grid grid-flow-col grid-cols-6 gap-x-3 px-2 py-4">
     <Day
       v-for="day in days"
       :key="day.name"

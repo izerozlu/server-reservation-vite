@@ -34,6 +34,7 @@
           items-center
           justify-center
           pl-9
+          mb-2
         "
       >
         Integration
