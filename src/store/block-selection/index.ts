@@ -1,20 +1,20 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
-import BlockTemplate from "../../interfaces/block-template";
-import Nullable from "../../types/nullable";
+import BlockType from "../../types/block-type";
+import Nullable from "../../types/utility/nullable";
 
 const useBlockSelectionStore = defineStore("block-selection", {
   state: () => ({
     active: false,
-    startingBlock: null as Nullable<BlockTemplate>,
-    endingBlock: null as Nullable<BlockTemplate>,
+    startingBlock: null as Nullable<BlockType>,
+    endingBlock: null as Nullable<BlockType>,
   }),
   actions: {
-    startBlockSelection(block: BlockTemplate) {
+    startBlockSelection(block: BlockType) {
       this.active = true;
       this.startingBlock = block;
       this.endingBlock = null;
     },
-    endBlockSelection(block: BlockTemplate) {
+    endBlockSelection(block: BlockType) {
       this.active = false;
       this.endingBlock = block;
     },

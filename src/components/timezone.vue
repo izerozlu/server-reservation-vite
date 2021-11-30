@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed } from "@vue/reactivity";
 
-import TimezoneTemplate from "../interfaces/timezone-template";
+import TimezoneType from "../interfaces/timezone-template";
 import useBlockSelectionStore from "../store/block-selection";
 
 import useUserActionsStore from "../store/user-actions";
@@ -42,7 +42,7 @@ const userActionsStore = useUserActionsStore();
 
 const { timezone, blockCount } = withDefaults(
   defineProps<{
-    timezone: TimezoneTemplate;
+    timezone: TimezoneType;
     blockCount?: number;
   }>(),
   {

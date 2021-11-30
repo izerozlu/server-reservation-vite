@@ -31,14 +31,13 @@
 </template>
 
 <script lang="ts">
-import DayTemplate from "../interfaces/day-template";
-import DayModifier from "../types/day-modifier";
+import DayType from "../types/day-type";
 </script>
 
 <script setup lang="ts">
 import Day from "./day.vue";
 
-const days: DayTemplate[] = [
+const days: DayType[] = [
   { name: "Monday", weekday: 1, id: "1" },
   { name: "Tuesday", weekday: 2, id: "2" },
   { name: "Wednesday", weekday: 3, id: "3" },
@@ -46,7 +45,9 @@ const days: DayTemplate[] = [
   { name: "Friday", weekday: 5, id: "5" },
 ];
 
-const getDayModifier = (weekday: number): DayModifier | null => {
+const getDayModifier = (
+  weekday: number
+): "yesterday" | "today" | "tomorrow" | null => {
   const today = new Date().getDay();
   switch (weekday) {
     case today - 1:

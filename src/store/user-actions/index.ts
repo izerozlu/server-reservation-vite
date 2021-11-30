@@ -1,18 +1,18 @@
 import { defineStore } from "pinia";
-import BlockTemplate from "../../interfaces/block-template";
-import Nullable from "../../types/nullable";
+import BlockType from "../../types/block-type";
+import Nullable from "../../types/utility/nullable";
 
 const useUserActionsStore = defineStore("user-actions", {
   state: () => ({
     selectedDay: new Date().getDay() as Nullable<number>,
-    takenBlocks: [] as BlockTemplate[],
-    hoveredBlock: null as Nullable<BlockTemplate>,
+    takenBlocks: [] as BlockType[],
+    hoveredBlock: null as Nullable<BlockType>,
   }),
   actions: {
     setSelectedDay(day: number) {
       this.selectedDay = day;
     },
-    hoverBlock({ block }: { block: Nullable<BlockTemplate> }) {
+    hoverBlock({ block }: { block: Nullable<BlockType> }) {
       this.hoveredBlock = block;
     },
   },

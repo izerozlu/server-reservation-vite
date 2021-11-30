@@ -94,13 +94,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import DayTemplate from "../interfaces/day-template";
-import TimezoneTemplate from "../interfaces/timezone-template";
+import DayType from "../types/day-type";
 
 import useBlockSelectionStore from "../store/block-selection";
 import useUserActionsStore from "../store/user-actions";
 
-import Nullable from "../types/nullable";
+import Nullable from "../types/utility/nullable";
+import TimezoneType from "../types/timezone-type";
 
 import Timezone from "./timezone.vue";
 
@@ -110,14 +110,14 @@ const userActionsStore = useUserActionsStore();
 // Props
 
 const { day, modifier } = defineProps<{
-  day: DayTemplate;
-  modifier: Nullable<string>;
+  day: DayType;
+  modifier: Nullable<"yesterday" | "today" | "tomorrow">;
 }>();
 
 // Static Data
 
 const TIMEZONE_COUNT = 19;
-const timezones: TimezoneTemplate[] = new Array(TIMEZONE_COUNT)
+const timezones: TimezoneType[] = new Array(TIMEZONE_COUNT)
   .fill(0)
   .map((_, index) => ({
     zone: `${Math.floor((index + 18) / 2)}${index % 2 === 0 ? ":00" : ":30"}`,

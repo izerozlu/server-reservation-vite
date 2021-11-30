@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import BlockTemplate from "../interfaces/block-template";
+import BlockType from "../types/block-type";
 
 import useBlockSelectionStore from "../store/block-selection";
 import useUserActionsStore from "../store/user-actions";
@@ -36,7 +36,7 @@ const userActionsStore = useUserActionsStore();
 
 // Props
 
-const { block } = defineProps<{ block: BlockTemplate }>();
+const { block } = defineProps<{ block: BlockType }>();
 
 // Computed
 
@@ -73,7 +73,7 @@ const isInBetweenBlock = computed(() => {
 
 // Methods
 
-const finishBlockSelection = (block: BlockTemplate) => {
+const finishBlockSelection = (block: BlockType) => {
   const { startingBlock } = blockSelectionStore;
 
   if (startingBlock?.column === block.column) {
