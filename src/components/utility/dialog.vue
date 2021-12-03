@@ -45,23 +45,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
+<script lang="ts" setup>
+import Close from "~/assets/svg/close.svg?component";
 
-import Close from '~/assets/svg/close.svg';
+// Props
 
-export default Vue.extend({
-  components: { Close },
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  methods: {
-    closeDialog() {
-      this.$emit('close-dialog');
-    },
-  },
-});
+const { show } = defineProps<{ show: boolean }>();
+
+// Emits
+
+const emit = defineEmits(["close-dialog"]);
+
+// Methods
+
+const closeDialog = () => {
+  emit("close-dialog");
+};
 </script>

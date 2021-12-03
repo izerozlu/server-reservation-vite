@@ -9,7 +9,6 @@
   "dependencies": {
     "pinia": "^2.0.4",
     "vue": "^3.2.16",
-    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.3",
@@ -19,6 +18,7 @@
     "tailwindcss": "^2.2.19",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",
+    "vite-svg-loader": "^3.1.0",
     "vue-tsc": "^0.3.0"
   }
 }

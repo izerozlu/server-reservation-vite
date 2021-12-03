@@ -1,11 +1,12 @@
-<script setup lang="ts">
-import "./style.css";
-import Week from "./components/week.vue";
-</script>
-
 <template>
   <Week />
 </template>
+
+<script setup lang="ts">
+/// <reference types="vite-svg-loader" />
+import "./style.css";
+import Week from "./components/week.vue";
+</script>
 
 <style>
 #app {
