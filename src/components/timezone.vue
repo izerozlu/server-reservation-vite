@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed } from "@vue/reactivity";
 
-import TimezoneType from "~/interfaces/timezone-template";
+import TimezoneType from "~/types/timezone-type";
 import useBlockSelectionStore from "~/store/block-selection";
 
 import useUserActionsStore from "~/store/user-actions";

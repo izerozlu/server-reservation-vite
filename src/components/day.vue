@@ -102,7 +102,7 @@ import useUserActionsStore from "~/store/user-actions";
 import Nullable from "~/types/utility/nullable";
 import TimezoneType from "~/types/timezone-type";
 
-import Timezone from "./timezone.vue";
+import Timezone from "~/components/timezone.vue";
 
 const blockSelectionStore = useBlockSelectionStore();
 const userActionsStore = useUserActionsStore();
