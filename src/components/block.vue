@@ -19,7 +19,7 @@
           ? finishBlockSelection(block)
           : blockSelectionStore.startBlockSelection(block)
     "
-    @mouseenter="() => userActionsStore.hoverBlock({ block })"
+    @mouseenter="() => userActionsStore.hoverBlock(block)"
   />
 </template>
 

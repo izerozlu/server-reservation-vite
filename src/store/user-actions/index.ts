@@ -12,7 +12,7 @@ const useUserActionsStore = defineStore("user-actions", {
     setSelectedDay(day: number) {
       this.selectedDay = day;
     },
-    hoverBlock({ block }: { block: Nullable<BlockType> }) {
+    hoverBlock(block: Nullable<BlockType>) {
       this.hoveredBlock = block;
     },
   },
