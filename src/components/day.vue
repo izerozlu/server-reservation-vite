@@ -2,6 +2,7 @@
   <div
     class="
       day
+      relative
       border border-gray-600
       rounded-lg
       grid grid-flow-row
@@ -88,6 +89,7 @@
         blockSelectionStore.endingBlock?.timezone === timezone
       "
     />
+    <Tooltip v-if="isTooltipActive" />
   </div>
 </template>
 
@@ -103,6 +105,7 @@ import Nullable from "~/types/utility/nullable";
 import TimezoneType from "~/types/timezone-type";
 
 import Timezone from "~/components/timezone.vue";
+import Tooltip from "~/components/utility/tooltip.vue";
 
 const blockSelectionStore = useBlockSelectionStore();
 const userActionsStore = useUserActionsStore();
@@ -125,6 +128,7 @@ const timezones: TimezoneType[] = new Array(TIMEZONE_COUNT)
     id: index,
     day,
   }));
+day.timezones = timezones;
 
 const columns = new Array(5).fill(0).map((_, index) => index + 1);
 
@@ -135,6 +139,13 @@ const isDaySelected = computed(() =>
     ? modifier === "today"
     : userActionsStore.selectedDay === day.weekday
 );
+
+const isTooltipActive = computed(() => {
+  return (
+    isDaySelected.value &&
+    blockSelectionStore.endingBlock
+  );
+});
 </script>
 
 <style lang="scss" scoped>

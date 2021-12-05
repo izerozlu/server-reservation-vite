@@ -62,6 +62,8 @@ const blocks = new Array(blockCount).fill(0).map((_, index: number) => {
   };
 });
 
+timezone.blocks = blocks;
+
 // Computed
 
 const isStartingTimezone = computed(

@@ -13,12 +13,7 @@
     }"
     type="button"
     :disabled="block.isTaken"
-    @click="
-      () =>
-        blockSelectionStore.active
-          ? finishBlockSelection(block)
-          : blockSelectionStore.startBlockSelection(block)
-    "
+    @click="finishBlockSelection(block)"
     @mouseenter="() => userActionsStore.hoverBlock(block)"
   />
 </template>
@@ -76,20 +71,24 @@ const isInBetweenBlock = computed(() => {
 const finishBlockSelection = (block: BlockType) => {
   const { startingBlock } = blockSelectionStore;
 
-  if (startingBlock?.column === block.column) {
-    // Same column with startingBlock
-    if (startingBlock.timezone.row > block.timezone.row) {
-      // startingBlock is above selected block
+  if (!blockSelectionStore.active) {
+    blockSelectionStore.startBlockSelection(block);
+  } else {
+    if (startingBlock?.column === block.column) {
+      // Same column with startingBlock
+      if (startingBlock.timezone.row > block.timezone.row) {
+        // startingBlock is above selected block
+        blockSelectionStore.cancelBlockSelection();
+        blockSelectionStore.startBlockSelection(block);
+      } else {
+        // startingBlock is below selected block
+        blockSelectionStore.endBlockSelection(block);
+      }
+    } else {
+      // Different column than startingBlock
       blockSelectionStore.cancelBlockSelection();
       blockSelectionStore.startBlockSelection(block);
-    } else {
-      // startingBlock is below selected block
-      blockSelectionStore.endBlockSelection(block);
     }
-  } else {
-    // Different column than startingBlock
-    blockSelectionStore.cancelBlockSelection();
-    blockSelectionStore.startBlockSelection(block);
   }
 };
 </script>
