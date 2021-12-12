@@ -3,3 +3,5 @@ node_modules
 dist
 dist-ssr
 *.local
+# remove this ignore after Github Environments is set up for the Firebase config data.
+src/firebase/initialization.ts

@@ -8,14 +8,12 @@ const useBlockSelectionStore = defineStore("block-selection", {
     active: false,
     startingBlock: null as Nullable<BlockType>,
     endingBlock: null as Nullable<BlockType>,
-    selectedService: null as Nullable<ServiceType>,
   }),
   getters: {
     selectedReservation: (state) => {
       return {
         startTime: state.startingBlock?.timezone.zone,
         endTime: state.endingBlock?.timezone.zone,
-        service: state.selectedService,
         day: state.startingBlock?.day.weekday,
       };
     },
@@ -33,12 +31,8 @@ const useBlockSelectionStore = defineStore("block-selection", {
       this.active = false;
       this.startingBlock = null;
       this.endingBlock = null;
-      this.selectedService = null;
     },
-    setSelectedService(service: ServiceType) {
-      this.selectedService = service;
-    },
-    finalizeBlockSelection() {
+    finalizeBlockSelection(selectedService: ServiceType) {
       if (this.startingBlock && this.endingBlock) {
         const column = this.startingBlock.column;
         const timezones = this.startingBlock.timezone.day.timezones;
@@ -61,13 +55,13 @@ const useBlockSelectionStore = defineStore("block-selection", {
 
           this.active = false;
           this.startingBlock.isTaken = true;
-          this.startingBlock.service = this.selectedService as ServiceType;
+          this.startingBlock.service = selectedService as ServiceType;
           this.endingBlock.isTaken = true;
-          this.endingBlock.service = this.selectedService as ServiceType;
+          this.endingBlock.service = selectedService as ServiceType;
           inBetweenBlocks.forEach((block) => {
             if (block) {
               block.isTaken = true;
-              block.service = this.selectedService as ServiceType;
+              block.service = selectedService as ServiceType;
             }
           });
 

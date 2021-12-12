@@ -119,8 +119,7 @@ const filteredServices = computed(() => {
 // Methods
 
 const finalizeSelection = (service: ServiceType) => {
-  blockSelectionStore.setSelectedService(service);
-  blockSelectionStore.finalizeBlockSelection();
+  blockSelectionStore.finalizeBlockSelection(service);
 };
 
 const discardTooltip = (event: MouseEvent) => {
