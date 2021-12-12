@@ -63,7 +63,7 @@ import useUserActionsStore from "~/store/user-actions";
 import DayType from "~/types/day-type";
 
 import Dialog from "~/components/utility/dialog.vue";
-import Tooltip from "~/components/utility/tooltip.vue";
+import Tooltip from "~/components/utility/service-selector.vue";
 import Day from "~/components/day.vue";
 
 const blockSelectionStore = useBlockSelectionStore();

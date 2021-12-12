@@ -1,7 +1,8 @@
 <template>
   <div
+    ref="root"
     class="
-      tooltip
+      service-selector
       absolute
       top-0
       left-0
@@ -12,13 +13,14 @@
       flex flex-col
     "
     :class="{
-      'items-end': tooltipPosition === 'right',
-      'items-start': tooltipPosition === 'left',
+      'items-end': position === 'right',
+      'items-start': position === 'left',
     }"
+    @click="discardTooltip"
   >
     <div
       class="
-        tooltip__content
+        service-selector__content
         content
         flex flex-col
         bg-white
@@ -57,9 +59,18 @@
 import { computed, ref } from "vue";
 import useBlockSelectionStore from "~/store/block-selection";
 import ServiceType from "~/types/service.type";
-import Nullable from "~/types/utility/nullable";
+
+// Stores
 
 const blockSelectionStore = useBlockSelectionStore();
+
+// References
+
+const root = ref<HTMLDivElement>();
+
+// Emits
+
+const emit = defineEmits<{ (event: "cancel"): void }>();
 
 // Data
 
@@ -92,7 +103,7 @@ const services: ServiceType[] = [
 
 // Computed
 
-const tooltipPosition = computed(() => {
+const position = computed(() => {
   const { startingBlock } = blockSelectionStore;
   const column = startingBlock?.column ?? 0;
 
@@ -110,5 +121,12 @@ const filteredServices = computed(() => {
 const finalizeSelection = (service: ServiceType) => {
   blockSelectionStore.setSelectedService(service);
   blockSelectionStore.finalizeBlockSelection();
+};
+
+const discardTooltip = (event: MouseEvent) => {
+  const { target } = event;
+  if (root.value === target) {
+    emit("cancel");
+  }
 };
 </script>

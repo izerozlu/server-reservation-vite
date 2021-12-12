@@ -18,7 +18,7 @@
         'cursor-pointer': !isDaySelected,
       },
     ]"
-    @click="userActionsStore.setSelectedDay(day.weekday)"
+    @click="setSelectedDay"
   >
     <div class="day__header flex justify-between">
       <h2 class="day__title capitalize text-2xl">{{ day.name }}</h2>
@@ -89,7 +89,10 @@
         blockSelectionStore.endingBlock?.timezone === timezone
       "
     />
-    <Tooltip v-if="isTooltipActive" />
+    <ServiceSelector
+      v-if="isServiceSelectorActive"
+      @cancel="blockSelectionStore.cancelBlockSelection()"
+    />
   </div>
 </template>
 
@@ -105,7 +108,7 @@ import Nullable from "~/types/utility/nullable";
 import TimezoneType from "~/types/timezone-type";
 
 import Timezone from "~/components/timezone.vue";
-import Tooltip from "~/components/utility/tooltip.vue";
+import ServiceSelector from "~/components/utility/service-selector.vue";
 
 const blockSelectionStore = useBlockSelectionStore();
 const userActionsStore = useUserActionsStore();
@@ -140,12 +143,22 @@ const isDaySelected = computed(() =>
     : userActionsStore.selectedDay === day.weekday
 );
 
-const isTooltipActive = computed(() => {
+const isServiceSelectorActive = computed(() => {
   return (
     isDaySelected.value &&
-    blockSelectionStore.endingBlock
+    blockSelectionStore.active &&
+    blockSelectionStore.endingBlock?.day.weekday === day.weekday
   );
 });
+
+// Methods
+
+const setSelectedDay = () => {
+  if (userActionsStore.selectedDay !== day.weekday) {
+    blockSelectionStore.cancelBlockSelection();
+    userActionsStore.setSelectedDay(day.weekday);
+  }
+};
 </script>
 
 <style lang="scss" scoped>

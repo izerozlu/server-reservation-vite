@@ -1,5 +1,6 @@
 import TimezoneType from "~/types/timezone-type";
 import DayType from "~/types/day-type";
+import ServiceType from "./service.type";
 
 export type BlockType = {
   id: string;
@@ -7,7 +8,7 @@ export type BlockType = {
   timezone: TimezoneType;
   column: number;
   isTaken: boolean;
-  note?: string;
+  service?: ServiceType;
 };
 
 export default BlockType;

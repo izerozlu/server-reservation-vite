@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import BlockType from "~/types/block-type";
 import Nullable from "~/types/utility/nullable";
+import useBlockSelectionStore from "../block-selection";
 
 const useUserActionsStore = defineStore("user-actions", {
   state: () => ({

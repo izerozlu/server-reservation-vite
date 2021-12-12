@@ -2,6 +2,7 @@
   <button
     :key="block.id"
     class="block h-full rounded flex-1"
+    :title="block.service"
     :class="{
       'bg-red-400': block.isTaken,
       'bg-yellow-400': isStartingBlock || isEndingBlock,
@@ -13,7 +14,7 @@
     }"
     type="button"
     :disabled="block.isTaken"
-    @click="finishBlockSelection(block)"
+    @click="!block.isTaken && handleBlockSelection(block)"
     @mouseenter="() => userActionsStore.hoverBlock(block)"
   />
 </template>
@@ -68,7 +69,7 @@ const isInBetweenBlock = computed(() => {
 
 // Methods
 
-const finishBlockSelection = (block: BlockType) => {
+const handleBlockSelection = (block: BlockType) => {
   const { startingBlock } = blockSelectionStore;
 
   if (!blockSelectionStore.active) {

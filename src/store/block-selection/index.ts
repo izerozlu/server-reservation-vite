@@ -27,13 +27,13 @@ const useBlockSelectionStore = defineStore("block-selection", {
       this.endingBlock = null;
     },
     endBlockSelection(block: BlockType) {
-      this.active = false;
       this.endingBlock = block;
     },
     cancelBlockSelection() {
       this.active = false;
       this.startingBlock = null;
       this.endingBlock = null;
+      this.selectedService = null;
     },
     setSelectedService(service: ServiceType) {
       this.selectedService = service;
@@ -61,10 +61,13 @@ const useBlockSelectionStore = defineStore("block-selection", {
 
           this.active = false;
           this.startingBlock.isTaken = true;
+          this.startingBlock.service = this.selectedService as ServiceType;
           this.endingBlock.isTaken = true;
+          this.endingBlock.service = this.selectedService as ServiceType;
           inBetweenBlocks.forEach((block) => {
             if (block) {
               block.isTaken = true;
+              block.service = this.selectedService as ServiceType;
             }
           });
 
